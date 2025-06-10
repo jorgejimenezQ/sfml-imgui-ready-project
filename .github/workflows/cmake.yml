@@ -1,0 +1,70 @@
+name: CMake Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+            name: "Windows Latest MSVC",
+            os: windows-latest,
+            build_type: "Release",
+            cc: "cl",
+            cxx: "cl",
+            generators: "Visual Studio 17 2022"
+          }
+          - {
+            name: "Ubuntu Latest GCC",
+            os: ubuntu-latest,
+            build_type: "Release",
+            cc: "gcc",
+            cxx: "g++",
+            generators: "Ninja"
+          }
+          - {
+            name: "macOS Latest Clang",
+            os: macos-latest,
+            build_type: "Release",
+            cc: "clang",
+            cxx: "clang++",
+            generators: "Ninja"
+          }
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install dependencies (Ubuntu)
+      if: startsWith(matrix.config.os, 'ubuntu')
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev ninja-build
+
+    - name: Install dependencies (macOS)
+      if: startsWith(matrix.config.os, 'macos')
+      run: |
+        brew install ninja
+
+    - name: Install dependencies (Windows)
+      if: startsWith(matrix.config.os, 'windows')
+      run: |
+        choco install ninja
+
+    - name: Configure CMake
+      run: >
+        cmake -S . -B build
+        -DCMAKE_BUILD_TYPE=${{matrix.config.build_type}}
+        -G "${{matrix.config.generators}}"
+        -DCMAKE_C_COMPILER=${{matrix.config.cc}}
+        -DCMAKE_CXX_COMPILER=${{matrix.config.cxx}}
+
+    - name: Build
+      run: cmake --build build --config ${{matrix.config.build_type}}

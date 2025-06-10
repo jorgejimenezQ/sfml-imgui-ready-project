@@ -1,0 +1,73 @@
+# CMake build directories
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeScripts/
+CMakeCache.txt
+cmake_install.cmake
+
+# Compiled Object files
+*.o
+*.obj
+*.lo
+*.slo
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.la
+*.lai
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Generated files
+Testing/
+DartConfiguration.tcl
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+*_autogen/
+
+# Dependencies fetched via FetchContent
+_deps/

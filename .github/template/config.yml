@@ -1,0 +1,6 @@
+# GitHub repository template configuration
+blank_issues_enabled: true
+contact_links:
+  - name: Question or Discussion
+    url: https://github.com/yourusername/CMakeLearn/discussions
+    about: Ask questions and discuss with other community members
