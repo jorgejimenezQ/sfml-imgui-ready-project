@@ -16,6 +16,20 @@ A modern C++ project template using CMake, SFML 3.0, and ImGui integration.
 - C++17 compatible compiler
 - Git
 
+### Platform-Specific Dependencies
+
+#### Ubuntu/Debian Linux
+```bash
+sudo apt-get update
+sudo apt-get install -y libxrandr-dev libxcursor-dev libudev-dev libopenal-dev libflac-dev libvorbis-dev libgl1-mesa-dev libegl1-mesa-dev libxi-dev
+```
+
+#### macOS
+No additional dependencies required if you have Xcode installed.
+
+#### Windows
+No additional dependencies required if you have Visual Studio installed.
+
 ## Quick Start
 
 ```bash
