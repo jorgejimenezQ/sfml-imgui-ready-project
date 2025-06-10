@@ -1,6 +1,7 @@
 #include "imgui.h" // necessary for ImGui::*, imgui-SFML.h doesn't include imgui.h
 #include "imgui-SFML.h" // for ImGui::SFML::* functions and SFML-specific overloads
 #include <SFML/Graphics.hpp>
+#include "shapes/Shape.h"
 
 #include <iostream>
 
@@ -26,7 +27,7 @@ static void showWindowWithMenu()
 static void showWindowWithcCheckbox(const char* label, bool* v)
 {
     ImGui::Begin("Checkbox");
-        ImGui::LabelText("label", label);
+        ImGui::LabelText("label", "%s", label);
         ImGui::Checkbox(label, v);
     ImGui::End();
 }
@@ -36,9 +37,14 @@ int main()
     sf::RenderWindow window(sf::VideoMode({1140, 680}), "ImGui + SFML = <3");
     window.setFramerateLimit(60);
 
-    ImGui::SFML::Init(window);
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    if (!ImGui::SFML::Init(window)) {
+        std::cerr << "ImGui SFML initialization failed" << std::endl;
+        return 1;
+    }
+    
+    // Use our new Shape class instead of sf::CircleShape directly
+    cmakelearn::Shape shape;
+    shape.setPosition(570.f, 340.f); // center in window
     static bool check = true;
 
     sf::Clock deltaClock;
@@ -64,7 +70,9 @@ int main()
         {
             shape.setFillColor(sf::Color::Red);
         }
-        window.draw(shape);
+        
+        // Use our draw method instead
+        shape.draw(window);
         ImGui::SFML::Render(window);
         window.display();
     }
