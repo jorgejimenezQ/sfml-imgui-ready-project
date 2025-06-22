@@ -71,3 +71,5 @@ CTestTestfile.cmake
 
 # Dependencies fetched via FetchContent
 _deps/
+
+repomix-output.xml
