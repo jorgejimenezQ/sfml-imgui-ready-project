@@ -5,8 +5,8 @@ add_library(shapes
 )
 
 # Link with necessary libraries
-target_link_libraries(shapes PUBLIC 
-    sfml-graphics
+target_link_libraries(shapes
+    PUBLIC sfml-graphics
 )
 
 # Include directories
