@@ -31,6 +31,14 @@ public:
          // TODO: add entities from entitiesToAdd the proper location(s)
          //        - add them to the vector of all entities
          //        - add them to the vector inside the map, with the tag as a key
+        for (const auto& e : entitiesToAdd)
+        {
+            entitiesList.push_back(e);
+            // entityMap[e->tag()].push_back(e);
+        }
+
+         entitiesToAdd.clear();
+
          // remove dead entities from hte vector of all entities
          removeDeadEntities(entitiesList);
 
@@ -44,7 +52,7 @@ public:
 
     std::shared_ptr<Entity> addEntity(const std::string& tag)
     {
-        //create the entiry shared pointer
+        //create the entity shared pointer
         auto entity = std::shared_ptr<Entity>(new Entity(totalEntities++, tag));
 
         // add it to the vec of all entities
@@ -56,6 +64,7 @@ public:
             entityMap[tag] = EntityVec();
         }
 
+        entityMap[tag].push_back(entity);
         return entity;
     }
 
@@ -70,6 +79,7 @@ public:
         {
             entityMap[tag] = EntityVec();
         }
+
         return entityMap[tag];
     }
 

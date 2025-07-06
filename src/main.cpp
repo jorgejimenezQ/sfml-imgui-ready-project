@@ -11,7 +11,8 @@
 
 int main()
 {
-    Game game("config.json");
+    const std::string configPath = "assets/bin/config.txt";
+    Game game(configPath);
     game.run();
     return 0;
 }

@@ -1,12 +1,19 @@
+// Game class header - Main game engine implementation
 #pragma once
 
 #include <SFML/Graphics.hpp>
 #include "../entitymanager/EntityManager.h"
 #include "Vec2.h"
+#include <sstream>
+
 
 struct PlayerConfig{int SR, CR, FR, FG, FB, OR, OG, OB, OT, V; float S; };
 struct EnemyConfig {int SR, CR, OR, OG, OB, OT, VMIN, VMAX, L, SI; float SMIN, SMAX;};
 struct BulletConfig{int SR, CR, FR, FG, FB, OR, OG, OB, OT, V, L; float S; };
+// W = width, H = height, FL = frame limit, FS = full screen ( 1 = true, 0 = false)
+struct WindowConfig{int W, H, FL, FS;};
+struct FontConfig{std::string fontFile; int fontSize; int R, G, B;};
+
 
 class Game
 {
@@ -14,9 +21,13 @@ class Game
     EntityManager       m_entities; // the entity manager
     sf::Font            m_font;   // the font
     sf::Text            m_text;   // the text to display the score
+
     PlayerConfig        m_playerConfig;
     EnemyConfig         m_enemyConfig;
     BulletConfig        m_bulletConfig;
+    WindowConfig        m_windowConfig;
+    FontConfig          m_fontConfig;
+
     sf::Clock           m_deltaClock;
     int                 m_score = 0;
     int                 m_currentFrame = 0;
@@ -24,6 +35,7 @@ class Game
     bool                m_paused = false;
     bool                m_running = true;
     std::shared_ptr<Entity> m_player;
+    std::stringstream ssDebug;
 
     void init(const std::string & config); // Initialize the game with a config file
     void setPaused(bool paused);
@@ -41,6 +53,10 @@ class Game
     void spawnSmallEnemies (std::shared_ptr<Entity> entity) ;
     void spawnBullet (std::shared_ptr<Entity> entity, const Vec2f & target);
     void spawnSpecialWeapon(std::shared_ptr<Entity> entity);
+    std::shared_ptr<Entity> player();
+
+    // Helper function for config parsing
+    void parseConfig(const std::string & type, const std::string & values);
 
 public:
     Game(const std::string & config);

@@ -34,6 +34,8 @@ public:
     CShape() = default;
     CShape(const float radius, size_t points, const sf::Color & fill, const sf::Color & outline, const float thickness)
     {
+        circle.setRadius(radius);
+        circle.setPointCount(points);
         circle.setFillColor(fill);
         circle.setOutlineColor(outline);
         circle.setOutlineThickness(thickness);
