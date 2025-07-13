@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "../entitymanager/EntityManager.h"
+#include "../systems/Systems.h"
 #include "Vec2.h"
 #include <sstream>
 
@@ -28,18 +29,25 @@ class Game
     WindowConfig        m_windowConfig;
     FontConfig          m_fontConfig;
 
-    sf::Clock           m_deltaClock;
-    int                 m_score = 0;
-    int                 m_currentFrame = 0;
-    int                 m_lastEnemySpawnTime = 0;
-    bool                m_paused = false;
-    bool                m_running = true;
+    Interpolate      m_interpolations;
+    sf::Clock        m_deltaClock;
+    int              m_score                 = 0;
+    int              m_currentFrame          = 0;
+    int              m_lastEnemySpawnTime    = 0;
+    bool             m_paused                = false;
+    bool             m_running               = true;
+    bool             m_isEnemeySpawnDisabled = false;
+    bool             m_isMovementDisabled    = false;
+    bool             m_isCollisionDisabled   = false;
+    bool             m_isLifespanDisabled    = false;
     std::shared_ptr<Entity> m_player;
     std::stringstream ssDebug;
 
+    InterpolationType m_debugEasing = EASEIN_SINE;
     void init(const std::string & config); // Initialize the game with a config file
     void setPaused(bool paused);
 
+    // System functions
     void sMovement();
     void sUserInput();
     void sLifespan();
@@ -49,16 +57,36 @@ class Game
     void sCollision();
 
     void spawnPlayer();
-    void spawnEnemy ();
-    void spawnSmallEnemies (std::shared_ptr<Entity> entity) ;
-    void spawnBullet (std::shared_ptr<Entity> entity, const Vec2f & target);
+    void spawnEnemy (const std::string& type);
+    void spawnSmallEnemies (std::shared_ptr<Entity> const& e) ;
+    void spawnBullet (const Vec2f & target);
     void spawnSpecialWeapon(std::shared_ptr<Entity> entity);
+    void spazbitMovement(std::shared_ptr<Entity> entity);
     std::shared_ptr<Entity> player();
 
-    // Helper function for config parsing
+    // Helper functions
     void parseConfig(const std::string & type, const std::string & values);
+    void guiOptions();
+    void guiLogging() const;
+    void guiSpawner();
+    void guiEntityTable();
+
+    // Add to Game.h in the private section
+    std::shared_ptr<Entity> createEntity(const std::string& tag,
+                                        const Vec2f& position,
+                                        int shapeRadius,
+                                        size_t vertexCount,
+                                        const sf::Color& fillColor,
+                                        const sf::Color& outlineColor,
+                                        float outlineThickness,
+                                        const Vec2f& velocity = Vec2f(0.0f, 0.0f),
+                                        int lifespan = 0,
+                                        int collisionRadius = 0,
+                                        int score = 0,
+                                        InterpolationType easing = EASEIN_SINE);
+
 
 public:
-    Game(const std::string & config);
+    explicit Game(const std::string & config);
     void run();
 };

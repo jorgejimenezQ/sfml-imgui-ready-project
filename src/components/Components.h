@@ -7,6 +7,17 @@
 #include "../vec2/Vec2.h"
 #include <SFML/Graphics.hpp>
 
+enum InterpolationType
+{
+    EASEOUT_ELASTIC,
+    EASEOUT_SINE,
+    EASEIN_ELASTIC,
+    EASEIN_SINE,
+    EASEINOUT_SINE,
+    EASEINOUT_ELASTIC,
+    EASEINOUT_EXPO,
+    EASEIN_EXPO,
+};
 
 class Component
 {
@@ -44,6 +55,35 @@ public:
         const sf::Vector2f center = { radius, radius };
         circle.setOrigin(center);
     }
+
+    float getRadius() const
+    {
+        return circle.getRadius();
+    }
+
+    size_t getPointCount() const
+    {
+        return circle.getPointCount();
+    }
+
+    void setFillColor(const sf::Color color)
+    {
+        circle.setFillColor(color);
+    }
+
+    void setOutlineColor(const sf::Color color)
+    {
+        circle.setOutlineColor(color);
+    }
+
+    sf::Color getOutlineColor() const
+    {
+        return circle.getOutlineColor();
+    }
+    sf::Color getFillColor() const
+    {
+        return circle.getFillColor();
+    }
 };
 
 class CCollision : public Component
@@ -57,6 +97,14 @@ public:
 
 };
 
+// class CShooting : public Component
+// {
+// public:
+//     bool isShooting = false;
+//     BulletType bulletType = USER;
+//     CShooting() = default;
+// };
+
 class CScore : public Component
 {
 public:
@@ -67,8 +115,19 @@ public:
         : score(s){}
 };
 
+class CInterpolation : public Component
+{
+public:
+    InterpolationType type = EASEIN_SINE;
+    explicit
+    CInterpolation(InterpolationType interpolationType):
+        type(interpolationType){}
+};
+
 class CLifespan : public Component
 {
+    InterpolationType easeing = EASEIN_SINE;
+
 public:
     int lifespan = 0;
     int remaining = 0;
@@ -76,6 +135,31 @@ public:
     CLifespan() = default;
     explicit CLifespan(const int totalLifespan)
         : lifespan(totalLifespan), remaining(totalLifespan){}
+
+    void setEasingType(InterpolationType const type)
+    {
+        easeing = type;
+    }
+
+    [[nodiscard]]
+    InterpolationType getEasing() const
+    {
+        return easeing;
+    }
+};
+
+class CSpazJump : public Component
+{
+public:
+    float distanceTraveled = 0.0f;   // what you were calling “progress”
+    float distanceToTravel  = 0.0f;   // what you were calling “dist”
+
+    CSpazJump() = default;
+    explicit
+    CSpazJump(const float distToJump)
+        : distanceToTravel(distToJump)
+    {
+    }
 };
 
 class CInput : public Component

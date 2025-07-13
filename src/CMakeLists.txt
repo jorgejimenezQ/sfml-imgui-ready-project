@@ -2,6 +2,7 @@
 add_subdirectory(shapes)
 add_subdirectory(vec2)
 add_subdirectory(components)
+add_subdirectory(systems)
 add_subdirectory(entity)
 add_subdirectory(entitymanager)
 add_subdirectory(game)
@@ -24,6 +25,7 @@ target_link_libraries(CMakeLearn
         PRIVATE shapes
         PRIVATE vec2
         PRIVATE components
+        PRIVATE systems
         PRIVATE entity
         PRIVATE entitymanager
         PRIVATE game

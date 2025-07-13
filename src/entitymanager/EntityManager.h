@@ -19,27 +19,37 @@ class EntityManager
     std::map<std::string, EntityVec>    entityMap;
     size_t                              totalEntities = 0;
 
-    void removeDeadEntities(EntityVec& vec)
+    static void removeDeadEntities(EntityVec& vec)
     {
-        //TODO: remove dead entities
+        vec.erase(
+            std::remove_if(vec.begin(), vec.end(),
+               [](const auto& entity) {
+                   return !entity->isActive();
+               }),
+            vec.end()
+        );
     }
 
 public:
      EntityManager() = default;
      void update()
      {
-         // TODO: add entities from entitiesToAdd the proper location(s)
-         //        - add them to the vector of all entities
-         //        - add them to the vector inside the map, with the tag as a key
         for (const auto& e : entitiesToAdd)
         {
             entitiesList.push_back(e);
             // entityMap[e->tag()].push_back(e);
+            // add it to the entity map
+            if (entityMap.find(e->tag()) == entityMap.end())
+            {
+                entityMap[e->tag()] = EntityVec();
+            }
+
+            entityMap[e->tag()].push_back(e);
         }
 
          entitiesToAdd.clear();
 
-         // remove dead entities from hte vector of all entities
+         // remove dead entities from the vector of all entities
          removeDeadEntities(entitiesList);
 
          // remove dead entities from each vector in the entity map
@@ -54,17 +64,12 @@ public:
     {
         //create the entity shared pointer
         auto entity = std::shared_ptr<Entity>(new Entity(totalEntities++, tag));
+        // can't use the statement below because of private constructor in Entity class
+        // auto entity = std::make_shared<Entity>(totalEntities++, tag);
 
         // add it to the vec of all entities
         entitiesToAdd.push_back(entity);
 
-        // add it to the entity map
-        if (entityMap.find(tag) == entityMap.end())
-        {
-            entityMap[tag] = EntityVec();
-        }
-
-        entityMap[tag].push_back(entity);
         return entity;
     }
 

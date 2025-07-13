@@ -5,6 +5,7 @@ add_library(game
 
 target_link_libraries(game
         PRIVATE entitymanager
+        PRIVATE systems
         PRIVATE sfml-graphics
         PRIVATE vec2
         PRIVATE ImGui-SFML
